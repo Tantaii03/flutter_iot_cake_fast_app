@@ -1,23 +1,23 @@
 name: flutter_iot_cake_fast_app
 description: A new Flutter project for IoT Cake Fast App.
-publish_to: 'none' 
+publish_to: 'none'
 
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.0.0 <4.0.0' 
+  sdk: ">=3.2.0 <4.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
-  
   cupertino_icons: ^1.0.8
   google_fonts: ^8.0.1
   font_awesome_flutter: ^10.12.0
   url_launcher: ^6.3.2
   map_launcher: ^4.4.3
   carousel_slider: ^5.1.2
+  dots_indicator: ^4.0.1
 
 dev_dependencies:
   flutter_test:
@@ -27,9 +27,15 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-
-  
   assets:
     - assets/images/
+    - assets/icon/icon.png
 
-  
+
+icons_launcher:
+  image_path: "assets/icon/icon.png"
+  platforms:
+    android:
+      enable: true
+    ios:
+      enable: true

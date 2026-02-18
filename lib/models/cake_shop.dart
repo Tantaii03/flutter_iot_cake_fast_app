@@ -7,10 +7,10 @@ class CakeShop {
   String address;
   String phone;
   String facebook;
-  String Website;
+  String website; // แก้จาก Website เป็น website
   String openCloseTime;
-  double latitude;
-  double longitude;
+  String latitude;
+  String longitude;
 
   CakeShop({
     required this.name,
@@ -21,7 +21,7 @@ class CakeShop {
     required this.address,
     required this.phone,
     required this.facebook,
-    required this.Website,
+    required this.website, // แก้จาก Website เป็น website
     required this.openCloseTime,
     required this.latitude,
     required this.longitude,
