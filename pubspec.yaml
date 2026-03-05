@@ -15,10 +15,18 @@ dependencies:
   google_fonts: ^8.0.1
   font_awesome_flutter: ^10.12.0
   url_launcher: ^6.3.2
-  map_launcher: ^4.4.3
+  
+  # --- ส่วนที่ใช้แสดงแผนที่ (ในหน้า CakeShopDetailUi) ---
+  flutter_map: ^7.0.2
+  latlong2: ^0.9.1
+
+  # --- ส่วนที่ใช้ในหน้า CakeShopListUi (ห้ามลบ/ห้ามคอมเมนต์ เพราะหน้า List เรียกใช้อยู่) ---
   carousel_slider: ^5.1.2
   dots_indicator: ^4.0.1
-  google_maps_flutter: ^2.14.2
+  
+  # --- ส่วนเสริมอื่นๆ (เปิดไว้เผื่อขยายโปรเจกต์ในอนาคต) ---
+  map_launcher: ^4.4.3
+  google_maps_flutter: ^2.14.2 
 
 dev_dependencies:
   flutter_test:
@@ -28,11 +36,13 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  
+  # การจัดการ Assets (รูปภาพ)
   assets:
     - assets/images/
     - assets/icon/icon.png
 
-
+# การตั้งค่า Icon ของแอป
 icons_launcher:
   image_path: "assets/icon/icon.png"
   platforms:

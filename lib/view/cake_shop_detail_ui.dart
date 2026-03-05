@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_iot_cake_fast_app/models/cake_shop.dart';
 import 'package:url_launcher/url_launcher.dart';
+// เพิ่มการ Import สำหรับแผนที่
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 
 class CakeShopDetailUi extends StatefulWidget {
   final CakeShop cakeShop;
@@ -12,8 +15,10 @@ class CakeShopDetailUi extends StatefulWidget {
 
 class _CakeShopDetailUiState extends State<CakeShopDetailUi> {
   Future<void> _launchInBrowser() async {
-    final Uri url = Uri.parse(
-        'https://www.google.com/maps/search/?api=1&query=${widget.cakeShop.latitude},${widget.cakeShop.longitude}');
+    final String googleMapsUrl =
+        'https://www.google.com/maps/search/?api=1&query=${widget.cakeShop.latitude},${widget.cakeShop.longitude}';
+
+    final Uri url = Uri.parse(googleMapsUrl);
     if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
       throw Exception('Could not launch $url');
     }
@@ -28,10 +33,15 @@ class _CakeShopDetailUiState extends State<CakeShopDetailUi> {
 
   @override
   Widget build(BuildContext context) {
+    // แปลงค่าพิกัดล่วงหน้าเพื่อความสะอาดของโค้ด
+    final double lat = double.tryParse(widget.cakeShop.latitude) ?? 0.0;
+    final double lng = double.tryParse(widget.cakeShop.longitude) ?? 0.0;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF1F8E9),
       appBar: AppBar(
         backgroundColor: const Color(0xFF668C62),
+        elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
           onPressed: () => Navigator.pop(context),
@@ -39,7 +49,8 @@ class _CakeShopDetailUiState extends State<CakeShopDetailUi> {
         title: Text(
           widget.cakeShop.name,
           style: const TextStyle(
-              color: Color(0xFF5D4037), fontWeight: FontWeight.bold),
+              color: Color.fromARGB(255, 98, 51, 8),
+              fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
       ),
@@ -67,6 +78,9 @@ class _CakeShopDetailUiState extends State<CakeShopDetailUi> {
                 decoration: BoxDecoration(
                   color: const Color(0xFFF9F3F5),
                   borderRadius: BorderRadius.circular(15),
+                  boxShadow: const [
+                    BoxShadow(color: Colors.black12, blurRadius: 4)
+                  ],
                 ),
                 child: Column(
                   children: [
@@ -98,33 +112,43 @@ class _CakeShopDetailUiState extends State<CakeShopDetailUi> {
             const SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: InkWell(
-                onTap: _launchInBrowser,
-                child: Container(
-                  height: 250,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    border:
-                        Border.all(color: const Color(0xFF668C62), width: 2),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(13),
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Image.asset(
-                          'assets/images/maps.png',
-                          width: double.infinity,
-                          height: double.infinity,
-                          fit: BoxFit.cover,
-                        ),
-                        const Icon(
-                          Icons.location_on,
-                          color: Colors.red,
-                          size: 50,
-                        ),
-                      ],
+              child: Container(
+                height: 250,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  border: Border.all(color: const Color(0xFF668C62), width: 2),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(13),
+                  child: FlutterMap(
+                    options: MapOptions(
+                      initialCenter: LatLng(lat, lng),
+                      initialZoom: 15.0,
                     ),
+                    children: [
+                      TileLayer(
+                        urlTemplate:
+                            'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                        userAgentPackageName: 'com.example.app',
+                      ),
+                      MarkerLayer(
+                        markers: [
+                          Marker(
+                            point: LatLng(lat, lng),
+                            width: 80,
+                            height: 80,
+                            child: GestureDetector(
+                              onTap: _launchInBrowser,
+                              child: const Icon(
+                                Icons.location_pin,
+                                color: Colors.red,
+                                size: 45,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ),
